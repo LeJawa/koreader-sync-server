@@ -19,6 +19,7 @@ local Errors = {
     [2002] = { status = 402, message = "Username is already registered.", },
     [2003] = { status = 403, message = "Invalid request", },
     [2004] = { status = 403, message = "Field 'document' not provided.", },
+    [2005] = { status = 403, message = "Registration is disabled on this server.", },
 }
 
 return Errors

@@ -16,6 +16,7 @@ local SyncsController = {
     error_invalid_fields = 2003,
     -- Do we really need to handle 'document' field specifically?
     error_document_field_missing = 2004,
+    error_registration_disabled = 2005,
 }
 
 local null = ngx.null
@@ -60,6 +61,19 @@ function SyncsController:auth_user()
 end
 
 function SyncsController:create_user()
+    print("Attempting to create user:", self.request.body.username)
+
+
+    -- Check if registration is disabled via environment variable
+    print("DISABLE_REGISTRATION =", os.getenv("DISABLE_REGISTRATION"))
+    if os.getenv("DISABLE_REGISTRATION") == "1" then
+        -- Write to console for debugging purposes
+        print("Registration attempt blocked: registration is disabled.")
+        ngx.log(ngx.WARN, "User registration attempt while registration is disabled.")
+        self:raise_error(self.error_registration_disabled)
+        return 403, { error = "Registration is disabled on this server" }
+    end
+
     local redis = self:getRedis()
 
     if not is_valid_key_field(self.request.body.username)

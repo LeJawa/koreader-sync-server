@@ -1,13 +1,22 @@
-version: '3.3'
-
 services:
   kosync:
-    image: koreader/kosync:latest
     container_name: kosync
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 7200:7200
+      - 17200:17200
     volumes:
       - ./logs/app:/app/koreader-sync-server/logs
       - ./logs/redis:/var/log/redis
       - ./data/redis:/var/lib/redis
+    environment:
+      - DISABLE_REGISTRATION=1 # Set to 1 to disable user registration, 0 to enable
+    restart: unless-stopped
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    external: true
 

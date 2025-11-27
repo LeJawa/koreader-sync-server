@@ -47,6 +47,15 @@ docker compose up -d --build
 To setup the server manually, please refer to the commands used in
 [Dockerfile][dockerfile] and [travis config file][travis-conf].
 
+
+Disable User Registration
+========================
+To prevent new users from registering (while still allowing existing users to log in), set the environment variable `DISABLE_REGISTRATION=1` when starting the server. When this variable is set, registration attempts will be blocked with HTTP 403 and the message:
+
+  { "error": "Registration is disabled on this server" }
+
+You must restart the service to change this setting. Logins for existing users are not affected.
+
 You can use the following command to verify that the sync server is ready to serve traffic:
 
 ```bash
